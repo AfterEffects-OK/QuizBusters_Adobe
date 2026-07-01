@@ -584,31 +584,29 @@ canvas {
     box-shadow: 0 0 30px var(--warning);
 }
 
-/* マニュアル閉じるボタンを枠線と同じ警告イエロー仕様に完全強制（強 specificity ＆ !important 適用）
-   .btn クラスや他のホバースタイル、疑似属性に負けないよう強力なセレクタを構成
-*/
-#close-manual-btn, 
+/* マニュアル閉じるボタンを「おとなしい真鍮色・アンティークゴールド」に設定（眩しすぎないようグローも控えめに） */
+#close-manual-btn,
 .close-manual-btn,
 button#close-manual-btn.btn,
 #review-modal button.close-manual-btn {
-    border: 1px solid var(--warning) !important;
-    border-color: var(--warning) !important;
-    color: var(--warning) !important;
-    text-shadow: 0 0 8px var(--warning) !important;
-    box-shadow: 0 0 15px rgba(255, 204, 0, 0.3), inset 0 0 10px rgba(255, 204, 0, 0.1) !important;
+    border: 1px solid #c4ac56 !important;
+    border-color: #c4ac56 !important;
+    color: #c4ac56 !important;
+    text-shadow: 0 0 5px rgba(196, 172, 86, 0.5) !important;
+    box-shadow: 0 0 8px rgba(196, 172, 86, 0.15), inset 0 0 5px rgba(196, 172, 86, 0.05) !important;
     background-color: transparent !important;
     transition: all 0.3s ease-in-out !important;
 }
 
-#close-manual-btn:hover, 
+#close-manual-btn:hover,
 .close-manual-btn:hover,
 button#close-manual-btn.btn:hover,
 #review-modal button.close-manual-btn:hover {
-    background: var(--warning) !important;
+    background: #c4ac56 !important;
     color: #000000 !important;
-    box-shadow: 0 0 30px var(--warning), 0 0 10px rgba(255, 204, 0, 0.5) !important;
+    box-shadow: 0 0 15px rgba(196, 172, 86, 0.5), 0 0 5px rgba(196, 172, 86, 0.2) !important;
     text-shadow: none !important;
-    border-color: var(--warning) !important;
+    border-color: #c4ac56 !important;
 }
 
 .hidden { display: none !important; }
