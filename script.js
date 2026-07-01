@@ -997,6 +997,101 @@ if (savedEmail) document.getElementById('input-email').value = savedEmail;
 setupTabs();
 initializeApp();
 
+// --- 遊び方（HOW TO PLAY）システムの動的生成 ＆ ロード処理 ---
+function setupHowToPlay() {
+    // 1. 遊び方マニュアルを表示するSF調のモーダルを生成してbodyに追加
+    const modal = document.createElement('div');
+    modal.id = 'how-to-play-modal';
+    modal.className = 'hidden';
+    modal.style.position = 'absolute';
+    modal.style.top = '0';
+    modal.style.left = '0';
+    modal.style.width = '100%';
+    modal.style.height = '100%';
+    modal.style.background = 'rgba(0, 5, 10, 0.96)';
+    modal.style.display = 'flex';
+    modal.style.justifyContent = 'center';
+    modal.style.alignItems = 'center';
+    modal.style.zIndex = '110';
+    modal.style.cursor = 'default';
+
+    modal.innerHTML = `
+        <div id="how-to-play-container" style="
+            width: 520px;
+            max-width: 90vw;
+            height: 75vh;
+            border: 1px solid var(--warning);
+            padding: 25px;
+            background: rgba(0, 15, 30, 0.98);
+            box-shadow: 0 0 35px rgba(255, 204, 0, 0.3);
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            font-family: 'Courier New', Courier, monospace;
+        ">
+            <h3 style="color: var(--warning); border-bottom: 1px solid var(--warning); padding-bottom: 8px; margin: 0; letter-spacing: 2px; text-shadow: 0 0 10px var(--warning); font-size: 20px;">SYSTEM MANUAL: HOW TO PLAY</h3>
+            
+            <div style="flex: 1; overflow-y: auto; padding-right: 10px; font-size: 14px; line-height: 1.6; color: rgba(255, 255, 255, 0.95);">
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--primary); margin: 0 0 6px 0; font-size: 15px; text-shadow: 0 0 5px var(--primary);">■ ミッション目的</h4>
+                    <p style="margin: 0;">迫りくる敵機の中から<span style="color: var(--success); font-weight: bold; text-shadow: 0 0 5px var(--success);">「クイズの正解」</span>が書かれた機体を見つけて撃破してください。誤答機体の撃破や、正解機体を見逃して画面外へ離脱（タイムアウト）させてしまうと、シールド（ライフ）が減少します。</p>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4 style="color: var(--primary); margin: 0 0 6px 0; font-size: 15px; text-shadow: 0 0 5px var(--primary);">■ 基本操作</h4>
+                    <p style="margin: 0 0 4px 0;"><span style="color: var(--warning); font-weight: bold;">照準の移動:</span> マウスの移動（またはタッチ）に追従します。</p>
+                    <p style="margin: 0 0 4px 0;"><span style="color: var(--warning); font-weight: bold;">レーザー射撃:</span> クリック（またはタップ）で射撃します。</p>
+                    <p style="margin: 0;"><span style="color: var(--warning); font-weight: bold;">一時停止（ポーズ）:</span> キーボードの <span style="color: var(--warning); font-weight: bold;">[ P ]</span> キーでゲームを一時停止・再開できます。</p>
+                </div>
+
+                <div style="margin-bottom: 10px;">
+                    <h4 style="color: var(--primary); margin: 0 0 6px 0; font-size: 15px; text-shadow: 0 0 5px var(--primary);">■ タクティカルシステム</h4>
+                    <p style="margin: 0 0 6px 0;"><span style="color: var(--success); font-weight: bold;">シールド（ライフ）:</span> 初期値は5。最大で10まで拡張可能です。</p>
+                    <p style="margin: 0 0 6px 0;"><span style="color: var(--success); font-weight: bold;">シールド回復:</span> スコアを4,000点獲得するごとにシールドが1回復します。シールドが10（最大）の状態で回復が発生した場合、代わりに<span style="color: var(--warning); font-weight: bold;">ボーナススコア+250点</span>が加算されます。</p>
+                    <p style="margin: 0 0 6px 0;"><span style="color: var(--success); font-weight: bold;">コンボボーナス:</span> 20問連続で正解するたびに、<span style="color: var(--warning); font-weight: bold;">コンボボーナス+200点</span>を獲得します。</p>
+                    <p style="margin: 0;"><span style="color: var(--danger); font-weight: bold;">過去エラー警告:</span> 以前に間違えた問題が出現すると、コックピットに「⚠ CAUTION: PAST ERROR DETECTED」警告が表示され、出題確率が上昇します。弱点を克服し、ハイスコアを目指しましょう！</p>
+                </div>
+            </div>
+
+            <button id="close-how-to-btn" class="btn" style="padding: 10px; font-size: 16px; border-color: var(--warning); color: var(--warning);">CLOSE MANUAL</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    // 2. スタートフォーム内に「HOW TO PLAY」ボタンを自動で挿入
+    const startForm = document.getElementById('start-form');
+    if (startForm) {
+        const rankingBtn = document.getElementById('ranking-btn');
+        const howToPlayBtn = document.createElement('button');
+        howToPlayBtn.id = 'how-to-play-btn';
+        howToPlayBtn.type = 'button';
+        howToPlayBtn.className = 'btn';
+        howToPlayBtn.innerText = 'HOW TO PLAY';
+
+        // ランキングボタンの下にきれいに並ぶように配置
+        if (rankingBtn) {
+            rankingBtn.parentNode.insertBefore(howToPlayBtn, rankingBtn.nextSibling);
+        } else {
+            startForm.appendChild(howToPlayBtn);
+        }
+
+        // イベント設定：遊び方マニュアルを表示
+        howToPlayBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+        });
+    }
+
+    // 閉じるボタンのイベント設定
+    document.getElementById('close-how-to-btn').addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+}
+
+// システムマニュアルのセットアップを実行
+setupHowToPlay();
+
+// レティクル（r3）のマウス追従処理（遅延効果付き）
 document.addEventListener('DOMContentLoaded', () => {
     const reticle = document.querySelector('.floating-reticle.r3');
     if (!reticle) return;
