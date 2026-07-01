@@ -958,3 +958,16 @@ canvas {
 #review-modal {
     cursor: default;
 }
+
+/* 遊び方ボタン用の警告/支援カラー（イエロー）を基調としたネオンスタイル */
+#how-to-play-btn {
+  border-color: var(--warning);
+  color: var(--warning);
+  margin-top: 15px;
+}
+
+#how-to-play-btn:hover {
+  background: var(--warning);
+  color: #000;
+  box-shadow: 0 0 30px var(--warning);
+}
