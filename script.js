@@ -131,7 +131,7 @@ let pilotEmail = "";
 const shotCooldown = 250;
 let mousePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 // TODO: 上記の.gsファイルをデプロイして取得したウェブアプリのURLをここに設定してください。
-const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyrx7STkcjAQiFSGGyYi2cGrUNj_U2-smM29nr9Ez2DTDFfoA6ZqSfDRfpHN-NbMvrnew/exec';
+const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw5GXAHzdP1bApWgqN6_IzrWYlXhVAU-_RXTko9R8xxq9mhQXYayGlI0GGXtMp26H2KEw/exec';
 
 const bgm = new Audio('https://github.com/AfterEffects-OK/QuizBusters_Adobe/raw/refs/heads/main/%E6%98%9F%E5%B1%91%E3%83%A1%E3%83%A2%E3%83%AA%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC.mp3');
 bgm.loop = true;
