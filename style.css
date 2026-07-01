@@ -232,7 +232,7 @@ canvas {
 }
 
 .hud-value {
-    font-size: 14px;
+    font-size: 18px; /* 14→18に変更 */
     font-weight: bold;
     display: block;
     margin-top: 2px;
