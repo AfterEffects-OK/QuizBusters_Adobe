@@ -127,7 +127,7 @@ let pauseStartTime = 0;
 let lastShotTime = 0;
 let pilotEmail = "";
 const shotCooldown = 250;
-const MAX_LIVES = 3;
+const MAX_LIVES = 10;
 let mousePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 // TODO: 上記の.gsファイルをデプロイして取得したウェブアプリのURLをここに設定してください。
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyrx7STkcjAQiFSGGyYi2cGrUNj_U2-smM29nr9Ez2DTDFfoA6ZqSfDRfpHN-NbMvrnew/exec';
@@ -235,7 +235,7 @@ class Enemy {
 }
 
 function initGame() {
-    player = new Player(); bullets = []; enemies = []; score = 0; lives = 3; shotsFired = 0; shotsHit = 0; incorrectlyAnswered = [];
+    player = new Player(); bullets = []; enemies = []; score = 0; lives = 5; shotsFired = 0; shotsHit = 0; incorrectlyAnswered = [];
     startTime = Date.now(); gameState = 'PLAYING';
     overlay.classList.add('hidden'); document.getElementById('stats-overlay').classList.add('hidden'); document.getElementById('start-form').classList.add('hidden');
     accuracyMiniFill.style.width = "0%";
@@ -450,7 +450,7 @@ function gameLoop() {
     }
     scoreEl.innerText = String(score).padStart(6, '0');
     document.getElementById('lives-display').innerText = '❤'.repeat(Math.max(0, Math.min(lives, MAX_LIVES)));
-    document.getElementById('health-bar').style.width = (lives / 3) * 100 + "%";
+    document.getElementById('health-bar').style.width = (lives / 5) * 100 + "%";
 
     radarBlipsEl.innerHTML = '';
     enemies.forEach(en => {
