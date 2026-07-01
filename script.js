@@ -859,7 +859,7 @@ async function initializeApp() {
         console.log(`${quizBank.length}件のクイズをスプレッドシートから読み込みました。`);
         
         startBtn.disabled = false;
-        startBtn.innerText = 'INITIALIZE SYSTEM';
+        startBtn.innerText = 'START MISSION';
     } catch (error) {
         console.error('クイズデータの読み込みに失敗しました:', error);
         document.getElementById('overlay-title').innerText = 'LOAD ERROR';
