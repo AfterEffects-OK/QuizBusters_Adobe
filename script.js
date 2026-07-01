@@ -1054,7 +1054,8 @@ function setupHowToPlay() {
                 </div>
             </div>
 
-            <button id="close-how-to-btn" class="btn" style="padding: 10px; font-size: 16px; border-color: var(--warning); color: var(--warning);">CLOSE MANUAL</button>
+            <!-- ボタンのIDを close-manual-btn、クラスを close-manual-btn に変更してCSSと完全同期 -->
+            <button id="close-manual-btn" class="btn close-manual-btn" style="padding: 10px; font-size: 16px; border-color: var(--warning); color: var(--warning);">CLOSE MANUAL</button>
         </div>
     `;
     document.body.appendChild(modal);
@@ -1082,8 +1083,8 @@ function setupHowToPlay() {
         });
     }
 
-    // 閉じるボタンのイベント設定
-    document.getElementById('close-how-to-btn').addEventListener('click', () => {
+    // 閉じるボタンのイベント設定（IDを close-manual-btn に変更して同期）
+    document.getElementById('close-manual-btn').addEventListener('click', () => {
         modal.classList.add('hidden');
     });
 }
