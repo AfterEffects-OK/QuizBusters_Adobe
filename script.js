@@ -118,7 +118,7 @@ const historyDetailsCache = {};
 
 let width, height;
 let player = null, bullets = [], enemies = [];
-let score = 0, lives = 3, startTime = 0, gameElapsedTime = 0;
+let score = 0, lives = 5, startTime = 0, gameElapsedTime = 0;
 let shotsFired = 0, shotsHit = 0;
 let incorrectlyAnswered = [];
 let currentQuiz = {}, gameState = 'START';
