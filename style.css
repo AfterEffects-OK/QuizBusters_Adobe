@@ -1,3 +1,7 @@
+/* ==========================================================================
+   GAME HUD STYLES
+   ========================================================================== */
+
 :root {
     --primary: #00f2fe;
     --secondary: #4facfe;
@@ -232,7 +236,7 @@ canvas {
 }
 
 .hud-value {
-    font-size: 24px; /* 14→24に変更 */
+    font-size: 14px;
     font-weight: bold;
     display: block;
     margin-top: 2px;
@@ -240,6 +244,16 @@ canvas {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* SHOTSカウントのフォントサイズと見た目を大幅に拡大、強調 */
+#shots-count {
+    font-size: 32px;
+    font-family: 'Orbitron', sans-serif, 'Courier New';
+    font-weight: bold;
+    color: var(--primary);
+    text-shadow: 0 0 12px var(--primary);
+    letter-spacing: 1px;
 }
 
 .hud-value-pilot {
@@ -556,8 +570,49 @@ canvas {
     box-shadow: 0 0 30px var(--secondary);
 }
 
+/* --- HOW TO PLAY (遊び方) 関連のスタイル --- */
+/* 遊び方ボタン用の警告/支援カラー（イエロー）を基調としたネオンスタイル */
+#how-to-play-btn {
+    border-color: var(--warning);
+    color: var(--warning);
+    margin-top: 15px;
+}
+
+#how-to-play-btn:hover {
+    background: var(--warning);
+    color: #000;
+    box-shadow: 0 0 30px var(--warning);
+}
+
+/* マニュアル閉じるボタンを枠線と同じ警告イエロー仕様に完全強制（強 specificity ＆ !important 適用）
+   .btn クラスや他のホバースタイル、疑似属性に負けないよう強力なセレクタを構成
+*/
+#close-manual-btn, 
+.close-manual-btn,
+button#close-manual-btn.btn,
+#review-modal button.close-manual-btn {
+    border: 1px solid var(--warning) !important;
+    border-color: var(--warning) !important;
+    color: var(--warning) !important;
+    text-shadow: 0 0 8px var(--warning) !important;
+    box-shadow: 0 0 15px rgba(255, 204, 0, 0.3), inset 0 0 10px rgba(255, 204, 0, 0.1) !important;
+    background-color: transparent !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+#close-manual-btn:hover, 
+.close-manual-btn:hover,
+button#close-manual-btn.btn:hover,
+#review-modal button.close-manual-btn:hover {
+    background: var(--warning) !important;
+    color: #000000 !important;
+    box-shadow: 0 0 30px var(--warning), 0 0 10px rgba(255, 204, 0, 0.5) !important;
+    text-shadow: none !important;
+    border-color: var(--warning) !important;
+}
+
 .hidden { display: none !important; }
-.label { color: var(--primary); font-size: 18px; margin-bottom: 2px; display: block; opacity: 0.8; }
+.label { color: var(--primary); font-size: 11px; margin-bottom: 2px; display: block; opacity: 0.8; }
 
 .form-input {
     width: 100%;
@@ -958,40 +1013,3 @@ canvas {
 #review-modal {
     cursor: default;
 }
-
-#ranking-btn:hover {
-    background: var(--secondary);
-    color: #000;
-    box-shadow: 0 0 30px var(--secondary);
-}
-
-/* --- HOW TO PLAY (遊び方) 関連のスタイル --- */
-/* 遊び方ボタン用の警告/支援カラー（イエロー）を基調としたネオンスタイル */
-#how-to-play-btn {
-    border-color: var(--warning);
-    color: var(--warning);
-    margin-top: 15px;
-}
-
-#how-to-play-btn:hover {
-    background: var(--warning);
-    color: #000;
-    box-shadow: 0 0 30px var(--warning);
-}
-
-/* マニュアル閉じるボタンを枠線と同じ警告イエロー仕様に統一 */
-#close-manual-btn, .close-manual-btn {
-    border-color: var(--warning) !important;
-    color: var(--warning) !important;
-    text-shadow: 0 0 8px var(--warning);
-    box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
-}
-
-#close-manual-btn:hover, .close-manual-btn:hover {
-    background: var(--warning) !important;
-    color: #000 !important;
-    box-shadow: 0 0 30px var(--warning) !important;
-    text-shadow: none !important;
-}
-
-.hidden { display: none !important; }
