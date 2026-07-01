@@ -1054,7 +1054,7 @@ function setupHowToPlay() {
                 </div>
             </div>
 
-            <button id="close-how-to-btn" class="btn" style="padding: 10px; font-size: 16px; border-color: var(--warning); color: var(--warning);">CLOSE MANUAL</button>
+            <button id="close-how-to-btn" class=".close-manual-btn" style="padding: 10px; font-size: 16px; border-color: var(--warning); color: var(--warning);">CLOSE MANUAL</button>
         </div>
     `;
     document.body.appendChild(modal);
