@@ -959,15 +959,39 @@ canvas {
     cursor: default;
 }
 
+#ranking-btn:hover {
+    background: var(--secondary);
+    color: #000;
+    box-shadow: 0 0 30px var(--secondary);
+}
+
+/* --- HOW TO PLAY (遊び方) 関連のスタイル --- */
 /* 遊び方ボタン用の警告/支援カラー（イエロー）を基調としたネオンスタイル */
 #how-to-play-btn {
-  border-color: var(--warning);
-  color: var(--warning);
-  margin-top: 15px;
+    border-color: var(--warning);
+    color: var(--warning);
+    margin-top: 15px;
 }
 
 #how-to-play-btn:hover {
-  background: var(--warning);
-  color: #000;
-  box-shadow: 0 0 30px var(--warning);
+    background: var(--warning);
+    color: #000;
+    box-shadow: 0 0 30px var(--warning);
 }
+
+/* マニュアル閉じるボタンを枠線と同じ警告イエロー仕様に統一 */
+#close-manual-btn, .close-manual-btn {
+    border-color: var(--warning) !important;
+    color: var(--warning) !important;
+    text-shadow: 0 0 8px var(--warning);
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+}
+
+#close-manual-btn:hover, .close-manual-btn:hover {
+    background: var(--warning) !important;
+    color: #000 !important;
+    box-shadow: 0 0 30px var(--warning) !important;
+    text-shadow: none !important;
+}
+
+.hidden { display: none !important; }
