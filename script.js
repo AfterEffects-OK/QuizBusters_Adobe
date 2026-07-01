@@ -118,7 +118,9 @@ const historyDetailsCache = {};
 
 let width, height;
 let player = null, bullets = [], enemies = [];
-let score = 0, lives = 5, startTime = 0, gameElapsedTime = 0;
+const INITIAL_LIVES = 5; // 初期ライフ数を5に設定
+const MAX_LIVES = 10;    // 最大ライフ数を10に設定
+let score = 0, lives = INITIAL_LIVES, startTime = 0, gameElapsedTime = 0;
 let shotsFired = 0, shotsHit = 0;
 let incorrectlyAnswered = [];
 let currentQuiz = {}, gameState = 'START';
@@ -127,7 +129,6 @@ let pauseStartTime = 0;
 let lastShotTime = 0;
 let pilotEmail = "";
 const shotCooldown = 250;
-const MAX_LIVES = 10;
 let mousePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 // TODO: 上記の.gsファイルをデプロイして取得したウェブアプリのURLをここに設定してください。
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyrx7STkcjAQiFSGGyYi2cGrUNj_U2-smM29nr9Ez2DTDFfoA6ZqSfDRfpHN-NbMvrnew/exec';
@@ -135,8 +136,6 @@ const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyrx7STkcjAQiFS
 const bgm = new Audio('https://github.com/AfterEffects-OK/QuizBusters_Adobe/raw/refs/heads/main/%E6%98%9F%E5%B1%91%E3%83%A1%E3%83%A2%E3%83%AA%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC.mp3');
 bgm.loop = true;
 bgm.volume = 0.3;
-
-
 
 let stars = [];
 const STAR_COUNT = 150;
@@ -235,9 +234,19 @@ class Enemy {
 }
 
 function initGame() {
-    player = new Player(); bullets = []; enemies = []; score = 0; lives = 5; shotsFired = 0; shotsHit = 0; incorrectlyAnswered = [];
-    startTime = Date.now(); gameState = 'PLAYING';
-    overlay.classList.add('hidden'); document.getElementById('stats-overlay').classList.add('hidden'); document.getElementById('start-form').classList.add('hidden');
+    player = new Player(); 
+    bullets = []; 
+    enemies = []; 
+    score = 0; 
+    lives = INITIAL_LIVES; // ゲーム初期化時に設定した初期ライフ(5)にする
+    shotsFired = 0; 
+    shotsHit = 0; 
+    incorrectlyAnswered = [];
+    startTime = Date.now(); 
+    gameState = 'PLAYING';
+    overlay.classList.add('hidden'); 
+    document.getElementById('stats-overlay').classList.add('hidden'); 
+    document.getElementById('start-form').classList.add('hidden');
     accuracyMiniFill.style.width = "0%";
     bgm.play().catch(e => console.error("BGMの再生に失敗しました:", e));
     nextQuestion();
@@ -423,7 +432,7 @@ function gameLoop() {
                         
                         Sound.playHit(); 
                         nextQuestion(); 
-                        break; // 弾が消えたのでこの弾の処理は終了
+                        break; 
                     } else { 
                         lives--; 
                         Sound.playError(); 
@@ -435,7 +444,7 @@ function gameLoop() {
                             explanation: currentQuiz.explanation
                         });
                         enemies.splice(ei, 1); 
-                        break; // 弾が消えたのでこの弾の処理は終了
+                        break; 
                     }
                 }
             }
@@ -450,7 +459,8 @@ function gameLoop() {
     }
     scoreEl.innerText = String(score).padStart(6, '0');
     document.getElementById('lives-display').innerText = '❤'.repeat(Math.max(0, Math.min(lives, MAX_LIVES)));
-    document.getElementById('health-bar').style.width = (lives / 5) * 100 + "%";
+    // 分母を INITIAL_LIVES (5) に合わせることで、開始時にぴったり 100% となるように表示
+    document.getElementById('health-bar').style.width = Math.min(100, (lives / INITIAL_LIVES) * 100) + "%";
 
     radarBlipsEl.innerHTML = '';
     enemies.forEach(en => {
@@ -461,10 +471,6 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
-/**
- * スコアをGoogle Apps Scriptバックエンドに送信します。
- * @param {object} scoreData - 送信するスコアデータ
- */
 async function submitScore(scoreData) {
     if (!GAS_WEB_APP_URL || GAS_WEB_APP_URL === '') {
         console.warn('ウェブアプリURLが設定されていません。スコアは送信されません。');
@@ -472,9 +478,6 @@ async function submitScore(scoreData) {
     }
 
     try {
-        // Google Apps ScriptへのPOSTは 'no-cors' モードで送信するのが簡単です。
-        // これにより、クライアント側はレスポンス内容を読み取れませんが、
-        // データを一方的に送信するだけなら問題ありません。
         await fetch(GAS_WEB_APP_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -497,7 +500,6 @@ function showGameOver() {
     
     bgm.pause();
     bgm.currentTime = 0;
-    
     
     let reviewHtml = '';
     if (incorrectlyAnswered.length > 0) {
@@ -537,7 +539,6 @@ function showGameOver() {
         ${reviewHtml}
     `;
 
-    // バックエンドに送信するスコアデータを作成
     const finalScoreData = {
         name: pilotDisplay.innerText,
         email: pilotEmail,
@@ -592,38 +593,29 @@ function openReviewModal(index) {
     modal.classList.remove('hidden');
 }
 
-/**
- * ランキングデータを処理し、表示します。
- */
 async function fetchAndRenderRanking() {
     rankingListContainer.innerHTML = `<p style="text-align: center; color: var(--secondary);">LOADING RANKING...</p>`;
     myScoresListContainer.innerHTML = `<p style="text-align: center; color: var(--secondary);">LOADING MY SCORES...</p>`;
     try {
-        // type=rankingパラメータを付与してGETリクエストを送信
         const response = await fetch(GAS_WEB_APP_URL + '?type=ranking');
         if (!response.ok) throw new Error('Failed to load ranking data.');
         const scores = await response.json();
 
-        // 全体のリーダーボードを処理
         if (!Array.isArray(scores) || scores.length === 0) {
             rankingListContainer.innerHTML = '<p style="text-align: center;">NO RANKING DATA AVAILABLE.</p>';
         } else {
-            // プレイヤーごとの最高スコアを抽出
             const bestScores = {};
             scores.forEach(score => {
-                // データ型を数値に統一
                 score.score = Number(score.score) || 0;
                 score.accuracy = Number(score.accuracy) || 0;
                 score.hits = Number(score.hits) || 0;
 
-                // プレイヤーを一意に識別するキーを作成
                 const playerKey = `${score.name || 'GUEST'}|${score.email || ''}`;
                 const existing = bestScores[playerKey];
 
                 if (!existing) {
                     bestScores[playerKey] = score;
                 } else {
-                    // より良いスコアか判定
                     if (score.score > existing.score) {
                         bestScores[playerKey] = score;
                     } else if (score.score === existing.score) {
@@ -636,22 +628,19 @@ async function fetchAndRenderRanking() {
                 }
             });
 
-            // 最終的なランキングリストをソート
             const rankedList = Object.values(bestScores).sort((a, b) => {
                 if (b.score !== a.score) return b.score - a.score;
                 if (b.accuracy !== a.accuracy) return b.accuracy - a.accuracy;
                 return b.hits - a.hits;
             });
 
-            // HTMLを生成して表示
             renderRanking(rankedList, rankingListContainer);
         }
 
-        // 個人のスコア履歴を処理
         const currentPilotEmail = document.getElementById('input-email').value;
         if (currentPilotEmail) {
             const myScores = scores.filter(score => score.email === currentPilotEmail)
-                                   .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)); // 新しい順
+                                   .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             if (myScores.length > 0) {
                 renderMyScores(myScores);
             } else {
@@ -695,7 +684,6 @@ function renderRanking(rankedList, container) {
 }
 
 function renderMyScores(myScores) {
-    // 個人スコアの中から最高スコアを見つける
     const myBestScore = myScores.reduce((best, current) => {
         if (!best) return current;
         if (current.score > best.score) return current;
@@ -728,17 +716,10 @@ function renderMyScores(myScores) {
     myScoresListContainer.innerHTML = html;
 }
 
-/**
- * 履歴詳細の単一表示からサマリー表示に戻ります。
- */
 function goBackToSummary() {
     renderHistoryDetails(window.currentHistoryDetails);
 }
 
-/**
- * 履歴詳細モーダル内で、個別の誤答カードを単独表示します。
- * @param {number} index - window.currentHistoryDetails 配列内のインデックス
- */
 function showSingleHistoryDetail(index) {
     const item = window.currentHistoryDetails[index];
     if (!item) return;
@@ -772,20 +753,13 @@ function showSingleHistoryDetail(index) {
     `;
 }
 
-/**
- * 過去のスコアIDに基づいて誤答詳細を取得し、モーダルで表示します。
- */
 async function showHistoryDetails(scoreId) {
     const modal = document.getElementById('review-modal');
     const content = document.getElementById('modal-content');
     
-    // スコアIDと詳細データをグローバルに保存して、単一表示からの「戻る」に対応
     window.currentHistoryScoreId = scoreId;
-    
-    // モーダルを表示してロード中メッセージを出す
     modal.classList.remove('hidden');
 
-    // キャッシュを確認
     if (historyDetailsCache[scoreId]) {
         renderHistoryDetails(historyDetailsCache[scoreId]);
         return;
@@ -798,7 +772,6 @@ async function showHistoryDetails(scoreId) {
         
         const data = await response.json();
         
-        // 取得したデータをキャッシュに保存
         historyDetailsCache[scoreId] = data;
         renderHistoryDetails(data);
         
@@ -810,7 +783,7 @@ async function showHistoryDetails(scoreId) {
 
 function renderHistoryDetails(data) {
     const content = document.getElementById('modal-content');
-    window.currentHistoryDetails = data; // 単一表示機能のためにグローバルにも保持
+    window.currentHistoryDetails = data;
 
     if (!data || data.length === 0) {
         content.innerHTML = `
@@ -849,8 +822,6 @@ async function initializeApp() {
     startBtn.disabled = true;
     startBtn.innerText = 'LOADING QUIZ DATA...';
 
-    // 保存されたメールアドレスがあれば、それをパラメータに追加して
-    // サーバー側で誤答履歴に基づいた重み付けを行ってもらう
     const savedEmail = localStorage.getItem('pilotEmail');
     let url = GAS_WEB_APP_URL + '?type=quiz';
     if (savedEmail) {
@@ -871,20 +842,19 @@ async function initializeApp() {
             document.getElementById('overlay-title').innerText = 'NO QUIZZES FOUND';
             const startForm = document.getElementById('start-form');
             startForm.innerHTML = `<p style="color:var(--warning); font-size: 12px; text-align: center; line-height: 1.6;">利用可能なクイズが見つかりませんでした。<br><br>【確認してください】<br>スプレッドシート「問題集」シートに、<br>以下の条件を満たす行がありますか？<br><br>1. 問題文、正解、不正解(3つ以上)が入力されている<br>2. 「表示・非表示フラグ」のチェックがOFFになっている</p>`;
-            startBtn.style.display = 'none'; // スタートボタンを非表示にする
-            return; // 処理を中断
+            startBtn.style.display = 'none';
+            return;
         }
 
-        // カテゴリリストを生成してプルダウンに追加
         const categories = [...new Set(quizBank.map(q => q.category).filter(Boolean))];
-        categories.sort(); // アルファベット順にソート
+        categories.sort();
         categories.forEach(cat => {
             const option = document.createElement('option');
             option.value = cat;
             option.textContent = cat.toUpperCase();
             categorySelect.appendChild(option);
         });
-        categorySelect.disabled = false; // プルダウンを有効化
+        categorySelect.disabled = false;
 
         console.log(`${quizBank.length}件のクイズをスプレッドシートから読み込みました。`);
         
@@ -913,8 +883,6 @@ function shoot() {
 }
 
 function resize() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; initStars(); }
-
-// --- イベントリスナーと初期化 ---
 
 window.addEventListener('resize', resize);
 window.addEventListener('mousemove', e => {
@@ -979,7 +947,7 @@ function setupTabs() {
 
 document.getElementById('start-btn').addEventListener('click', () => {
     if (!quizDataLoaded) {
-        alert('クイズデータをロード中です。しばらく待ってからもう一度お試しください。');
+        console.warn('クイズデータのロードが完了していません。');
         return;
     }
     const nameInput = document.getElementById('input-name');
@@ -989,7 +957,6 @@ document.getElementById('start-btn').addEventListener('click', () => {
     pilotEmail = emailInput.value || '';
     selectedCategory = categorySelect.value;
 
-    // 情報を保存
     localStorage.setItem('pilotName', nameInput.value);
     localStorage.setItem('pilotEmail', pilotEmail);
 
@@ -999,7 +966,6 @@ document.getElementById('start-btn').addEventListener('click', () => {
 });
 
 document.getElementById('restart-btn').addEventListener('click', () => {
-    // ゲームオーバー画面からリスタートする際は、名前入力画面に戻さず即再開
     overlay.classList.add('hidden');
     document.getElementById('stats-overlay').classList.add('hidden');
     initGame();
@@ -1020,21 +986,17 @@ document.getElementById('close-modal-btn').addEventListener('click', () => {
     document.getElementById('review-modal').classList.add('hidden');
 });
 
-// --- アプリケーション起動 ---
-
 resize();
 requestAnimationFrame(gameLoop);
 
-// 保存されたプレイヤー情報を読み込み
 const savedName = localStorage.getItem('pilotName');
 const savedEmail = localStorage.getItem('pilotEmail');
 if (savedName) document.getElementById('input-name').value = savedName;
 if (savedEmail) document.getElementById('input-email').value = savedEmail;
 
 setupTabs();
-initializeApp(); // クイズデータの読み込みを開始
+initializeApp();
 
-// レティクル（r3）のマウス追従処理（遅延効果付き）
 document.addEventListener('DOMContentLoaded', () => {
     const reticle = document.querySelector('.floating-reticle.r3');
     if (!reticle) return;
@@ -1043,14 +1005,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentX = mousePos.x;
     let currentY = mousePos.y;
 
-    // 追従の遅延係数（0.01〜1.0）。値が小さいほど遅れてついてくる（慣性が強くなる）
     const ease = 0.12;
 
     function animateReticle() {
         const targetX = mousePos.x;
         const targetY = mousePos.y;
 
-        // 現在位置を目標位置（マウス）に少しずつ近づける
         currentX += (targetX - currentX) * ease;
         currentY += (targetY - currentY) * ease;
         
