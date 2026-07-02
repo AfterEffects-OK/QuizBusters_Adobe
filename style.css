@@ -176,9 +176,9 @@ canvas {
 
 .hud-module {
     position: relative;
-    padding: 14px;
+    padding: 12px;
     text-transform: uppercase;
-    font-size: 26px;
+    font-size: 24px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -236,7 +236,7 @@ canvas {
 }
 
 .hud-value {
-    font-size: 30px;
+    font-size: 26px;
     font-weight: bold;
     display: block;
     margin-top: 2px;
@@ -248,7 +248,7 @@ canvas {
 
 /* SHOTSカウントのフォントサイズと見た目を大幅に拡大、強調 */
 #shots-count {
-    font-size: 38px;
+    font-size: 26px;
     font-family: 'Orbitron', sans-serif, 'Courier New';
     font-weight: bold;
     color: var(--primary);
@@ -257,7 +257,7 @@ canvas {
 }
 
 .hud-value-pilot {
-    font-size: 32px;
+    font-size: 30px;
     color: var(--primary);
     letter-spacing: 1px;
     font-family: 'Orbitron', sans-serif, 'Courier New';
@@ -269,7 +269,7 @@ canvas {
 }
 
 .hud-value-large {
-    font-size: 30px; 
+    font-size: 28px; 
     font-family: 'Orbitron', sans-serif, 'Courier New';
     letter-spacing: 1px;
 }
@@ -406,7 +406,7 @@ canvas {
 
 #question-text {
     color: #fff;
-    font-size: 20px;
+    font-size: 24px;
     text-align: center;
     text-shadow: 0 0 10px var(--primary);
     margin: 0;
