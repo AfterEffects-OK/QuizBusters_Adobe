@@ -236,7 +236,7 @@ canvas {
 }
 
 .hud-value {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     display: block;
     margin-top: 2px;
@@ -257,7 +257,7 @@ canvas {
 }
 
 .hud-value-pilot {
-    font-size: 24px;
+    font-size: 28px;
     color: var(--primary);
     letter-spacing: 1px;
     font-family: 'Orbitron', sans-serif, 'Courier New';
@@ -269,7 +269,7 @@ canvas {
 }
 
 .hud-value-large {
-    font-size: 26px; 
+    font-size: 30px; 
     font-family: 'Orbitron', sans-serif, 'Courier New';
     letter-spacing: 1px;
 }
@@ -301,7 +301,7 @@ canvas {
 }
 
 #lock-status {
-    font-size: 25px;
+    font-size: 38px;
     font-weight: bold;
     display: block;
     transition: color 0.2s;
