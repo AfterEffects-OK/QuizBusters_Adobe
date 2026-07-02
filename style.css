@@ -257,7 +257,7 @@ canvas {
 }
 
 .hud-value-pilot {
-    font-size: 26px;
+    font-size: 20px;
     color: var(--primary);
     letter-spacing: 1px;
     font-family: 'Orbitron', sans-serif, 'Courier New';
