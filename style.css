@@ -236,7 +236,7 @@ canvas {
 }
 
 .hud-value {
-    font-size: 14px;
+    font-size: 20px;
     font-weight: bold;
     display: block;
     margin-top: 2px;
@@ -257,7 +257,7 @@ canvas {
 }
 
 .hud-value-pilot {
-    font-size: 20px;
+    font-size: 24px;
     color: var(--primary);
     letter-spacing: 1px;
     font-family: 'Orbitron', sans-serif, 'Courier New';
