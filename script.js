@@ -159,8 +159,10 @@ function drawSpaceBackground() {
 }
 
 function formatTime(ms) {
-    const m = Math.floor(ms / 60000); const s = Math.floor((ms % 60000) / 1000);
-    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const h = Math.floor(ms / 3600000); // 時間を追加
+    const m = Math.floor((ms % 3600000) / 60000); 
+    const s = Math.floor((ms % 60000) / 1000);
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
 class Player {
