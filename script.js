@@ -130,15 +130,6 @@ let lastShotTime = 0;
 let pilotEmail = "";
 const shotCooldown = 250;
 let mousePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-
-// --- [最適化] オフスクリーン・キャンバスの準備 ---
-const offscreenBgCanvas = document.createElement('canvas');
-const offscreenBgCtx = offscreenBgCanvas.getContext('2d');
-
-// --- [最適化] オブジェクト・プール ---
-const bulletPool = [];
-const BULLET_POOL_SIZE = 20;
-
 // TODO: 上記の.gsファイルをデプロイして取得したウェブアプリのURLをここに設定してください。
 const GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbw5GXAHzdP1bApWgqN6_IzrWYlXhVAU-_RXTko9R8xxq9mhQXYayGlI0GGXtMp26H2KEw/exec';
 
@@ -156,13 +147,15 @@ function initStars() {
     }
 }
 
-// 星空の描画最適化（オフスクリーン・バッファを使用）
 function drawSpaceBackground() {
-    // 毎フレーム描画せず、背景キャンバスを1枚の画像として描画
-    ctx.drawImage(offscreenBgCanvas, 0, 0);
-    
-    // 動的な星の動きだけをメインで処理（またはオフスクリーンを動的に更新）
-    // ※今回はさらに軽くするため、星の座標更新後にオフスクリーンを更新する構成を推奨
+    ctx.save(); ctx.translate(width / 2, height / 2);
+    stars.forEach(star => {
+        star.z -= 0.002; if (star.z <= 0) star.z = 2;
+        const scale = 400 / star.z; const px = star.x * (scale / 400); const py = star.y * (scale / 400);
+        const opacity = Math.min(1, (2 - star.z) * star.brightness);
+        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`; ctx.beginPath(); ctx.arc(px, py, star.size * (1 / star.z), 0, Math.PI * 2); ctx.fill();
+    });
+    ctx.restore();
 }
 
 function formatTime(ms) {
@@ -202,31 +195,12 @@ class Player {
     }
 }
 
-// 弾丸クラスの修正（再利用可能にする）
 class Bullet {
-    constructor(tx, ty) {
-        this.reset(tx, ty);
-    }
-    reset(tx, ty) {
-        this.z = 1.0;
-        this.tx = tx;
-        this.ty = ty;
-        this.active = true;
-    }
-    update() {
-        if (!this.active) return false;
-        this.z -= 0.05;
-        if (this.z <= 0) this.active = false;
-        return !this.active;
-    }
-    draw() {
-        if (!this.active) return;
-        ctx.fillStyle = "#fff";
-        ctx.beginPath();
-        ctx.arc(this.tx, this.ty, Math.max(1, this.z * 15), 0, Math.PI * 2);
-        ctx.fill();
-    }
+    constructor(tx, ty) { this.z = 1.0; this.tx = tx; this.ty = ty; }
+    update() { this.z -= 0.05; return this.z <= 0; }
+    draw() { ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(this.tx, this.ty, Math.max(1, this.z * 15), 0, Math.PI * 2); ctx.fill(); }
 }
+
 class Enemy {
     constructor(text, isCorrect, col, row) { this.text = text; this.isCorrect = isCorrect; this.col = col; this.row = row; this.z = 0; this.w = 200; this.h = 60; }
     update() { this.z += 0.0004; return this.z >= 2.0; }
@@ -260,7 +234,6 @@ class Enemy {
 }
 
 function initGame() {
-    initBulletPool(); // ゲーム開始前かアプリ起動時に一度実行
     player = new Player(); 
     bullets = []; 
     enemies = []; 
@@ -903,41 +876,23 @@ function showBonusEffect(text) {
     setTimeout(() => el.remove(), 2000);
 }
 
-// 射撃関数の最適化（プールから取得）
 function shoot() {
     if (gameState !== 'PLAYING' || Date.now() - lastShotTime < shotCooldown) return;
-    
-    // プールから非アクティブな弾丸を探す
-    let b = bulletPool.find(bullet => !bullet.active);
-    if (!b) {
-        // プールが足りない場合のみ新規作成
-        b = new Bullet(player.x, player.y);
-        bulletPool.push(b);
-    } else {
-        b.reset(player.x, player.y);
-    }
-    
-    bullets.push(b); 
-    shotsFired++;
-    Sound.playShoot();
-    player.recoil = 15;
-    lastShotTime = Date.now();
+    bullets.push(new Bullet(player.x, player.y)); shotsFired++;
+    Sound.playShoot(); player.recoil = 15; lastShotTime = Date.now();
 }
 
-// リサイズ時にオフスクリーンも更新
-function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-    
-    // オフスクリーンのサイズ同期
-    offscreenBgCanvas.width = width;
-    offscreenBgCanvas.height = height;
-    
-    initStars();
-    preRenderBackground(); // 事前描画
-}
+function resize() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; initStars(); }
+
+window.addEventListener('resize', resize);
+window.addEventListener('mousemove', e => {
+    mousePos.x = e.clientX;
+    mousePos.y = e.clientY;
+
+    if (player) {
+        player.targetX = mousePos.x;
+        player.targetY = mousePos.y;
+    }
 });
 window.addEventListener('mousedown', e => { if (gameState === 'PLAYING' && !e.target.closest('.btn') && !e.target.closest('input')) shoot(); });
 window.addEventListener('keydown', e => {
@@ -988,22 +943,6 @@ function setupTabs() {
             document.getElementById(contentId).classList.add('active');
         });
     });
-}
-
-// 背景の事前描画（負荷分散）
-function preRenderBackground() {
-    offscreenBgCtx.fillStyle = '#020408';
-    offscreenBgCtx.fillRect(0, 0, width, height);
-    offscreenBgCtx.save();
-    offscreenBgCtx.translate(width / 2, height / 2);
-    stars.forEach(star => {
-        const opacity = Math.min(1, (2 - star.z) * star.brightness);
-        offscreenBgCtx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
-        offscreenBgCtx.beginPath();
-        offscreenBgCtx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        offscreenBgCtx.fill();
-    });
-    offscreenBgCtx.restore();
 }
 
 document.getElementById('start-btn').addEventListener('click', () => {
