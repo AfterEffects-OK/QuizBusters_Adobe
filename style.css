@@ -900,7 +900,7 @@ button#close-manual-btn.btn:hover,
     font-size: 26px;
     font-weight: bold;
     letter-spacing: 12px; /* [] の文字間を広げ、アスペクト比を1:1(正方形)に近づける */
-    text-indent: 12px; /* letter-spacingによって生じる右側の余白を相殺し中心を合わせる */
+    margin-right: -12px; /* 修正: letter-spacingによって生じる右側の余白を相殺し、完璧に中心を合わせる */
     display: inline-block;
     text-align: center;
     white-space: nowrap; /* 幅指定を外し、折り返しを防いで綺麗に四角形を保つ */
@@ -922,7 +922,7 @@ button#close-manual-btn.btn:hover,
     position: absolute;
     transform: translate(-50%, -50%);
     letter-spacing: 14px; /* r3専用の間隔調整で正方形に見えるように */
-    text-indent: 34px; /* ズレ補正 */
+    margin-right: -14px; /* 修正: ズレ補正 */
 }
 
 
