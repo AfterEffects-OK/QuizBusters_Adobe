@@ -922,7 +922,7 @@ button#close-manual-btn.btn:hover,
     position: absolute;
     transform: translate(-50%, -50%);
     letter-spacing: 14px; /* r3専用の間隔調整で正方形に見えるように */
-    text-indent: 24px; /* ズレ補正 */
+    text-indent: 34px; /* ズレ補正 */
 }
 
 
