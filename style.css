@@ -404,18 +404,23 @@ canvas {
     box-shadow: 0 0 15px var(--ui-glow), inset 0 0 15px rgba(0, 242, 254, 0.1);
     clip-path: polygon(0 15px, 15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px));
     padding: 8px 25px; /* 上下のパディングをさらにスリムに設定 */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-rows: 20px 1fr; /* 1行目を警告文用エリア（20px固定）、2行目を問題文エリアに定義 */
     align-items: center;
-    gap: 4px; /* 警告文と問題文の隙間を確実に狭めるため4pxに縮小 */
+    justify-items: center;
+    row-gap: 4px; /* 警告文と問題文の隙間を4pxに設定 */
 }
 
-/* 中央ディスプレイ内の全子要素のマージン、パディング、行高（上下の不要な余白）を強制リセット */
+/* 中央ディスプレイ内の全子要素のマージン、パディング、行高をリセット */
 #central-display > * {
     margin: 0 !important;
     padding: 0 !important;
     line-height: 1.2 !important;
+}
+
+/* 警告文要素を常に1行目に固定配置（問題文以外のすべての子要素を対象） */
+#central-display > *:not(#question-text) {
+    grid-row: 1;
 }
 
 /* 要素の間に改行用空タグ（brなど）が挟まっている場合に非表示化して余白を完全にゼロにする */
@@ -424,6 +429,7 @@ canvas {
 }
 
 #question-text {
+    grid-row: 2; /* 警告文が非表示（display: none）になっても、問題文は常に2行目に固定配置 */
     color: #fff;
     font-size: 20px;
     text-align: center;
