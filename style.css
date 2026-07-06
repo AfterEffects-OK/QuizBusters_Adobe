@@ -892,14 +892,14 @@ button#close-manual-btn.btn:hover,
     opacity: 0.4;
     display: flex;
     align-items: center;
-    gap: 16px; /* ターゲットマーカーの [] とデータの隙間を少し広げて読みやすく調整 */
+    gap: 14px; /* ターゲットマーカーの [] とデータの隙間を少し広げて読みやすく調整 */
 }
 
 /* ターゲットマーカーブラケット [] 部分のフォントサイズと間隔のバランス調整 */
 .reticle-mark {
     font-size: 26px;
     font-weight: bold;
-    letter-spacing: 16px; /* [] の文字間を広げ、アスペクト比を1:1(正方形)に近づける */
+    letter-spacing: 14px; /* [] の文字間を広げ、アスペクト比を1:1(正方形)に近づける */
     display: inline-block;
     text-align: center;
     width: 32px; /* 横方向の占有幅を規定して四角形としての枠組みを美しく見せる */
