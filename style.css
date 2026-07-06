@@ -20,7 +20,7 @@ body, html {
     height: 100%;
     overflow: hidden;
     background-color: var(--bg);
-    font-family: 'Orbitron', sans-serif, 'Courier New', Courier, monospace;
+    font-family: 'Chakra Petch', sans-serif, 'Courier New', Courier, monospace;
     color: white;
     user-select: none;
     touch-action: none;
@@ -102,6 +102,7 @@ canvas {
 
 @keyframes scanline-move {
     from { background-position-y: 0; }
+  #game-container {
     to { background-position-y: -400px; }
 }
 
@@ -249,7 +250,7 @@ canvas {
 /* SHOTSカウントのフォントサイズと見た目を大幅に拡大、強調 */
 #shots-count {
     font-size: 32px;
-    font-family: 'Orbitron', sans-serif, 'Courier New';
+    font-family: 'Chakra Petch', sans-serif, 'Courier New';
     font-weight: bold;
     color: var(--primary);
     text-shadow: 0 0 12px var(--primary);
@@ -260,7 +261,7 @@ canvas {
     font-size: 20px;
     color: var(--primary);
     letter-spacing: 1px;
-    font-family: 'Orbitron', sans-serif, 'Courier New';
+    font-family: 'Chakra Petch', sans-serif, 'Courier New';
 }
 
 .hud-module-large {
@@ -270,7 +271,7 @@ canvas {
 
 .hud-value-large {
     font-size: 26px; 
-    font-family: 'Orbitron', sans-serif, 'Courier New';
+    font-family: 'Chakra Petch', sans-serif, 'Courier New';
     letter-spacing: 1px;
 }
 
@@ -828,7 +829,7 @@ button#close-manual-btn.btn:hover,
     top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Chakra Petch', sans-serif;
     font-size: 48px;
     font-weight: bold;
     color: var(--warning);
@@ -916,13 +917,16 @@ button#close-manual-btn.btn:hover,
 
 .side-decoration {
     position: absolute;
-    top: 50%;
-    width: 4px;
-    height: 200px;
-    background: rgba(0, 242, 254, 0.2);
-    transform: translateY(-50%);
-    z-index: 5;
-    pointer-events: none;
+  , display: flex;
+    justify-content: center;
+    align-items: center;
+    background: 
+        radial-gradient(circle at 20% 30%, rgba(79, 172, 254, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 80% 70%, rgba(255, 75, 43, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at center, #050a14 0%, #020408 100%);
+    background-size: 200% 200%;
+    animation: background-pan 120s ease-in-out infinite;
+    cursor: none;
 }
 
 .side-decoration::before {
