@@ -403,17 +403,24 @@ canvas {
     border: 1px solid var(--primary);
     box-shadow: 0 0 15px var(--ui-glow), inset 0 0 15px rgba(0, 242, 254, 0.1);
     clip-path: polygon(0 15px, 15px 0, calc(100% - 15px) 0, 100% 15px, 100% calc(100% - 15px), calc(100% - 15px) 100%, 15px 100%, 0 calc(100% - 15px));
-    padding: 12px 25px;
+    padding: 8px 25px; /* 上下のパディングをさらにスリムに設定 */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 8px; /* 警告文と問題文の間の余白を極限まで詰めて、以前の約半分に調整 */
+    gap: 4px; /* 警告文と問題文の隙間を確実に狭めるため4pxに縮小 */
 }
 
-/* 中央ディスプレイの中の全要素の余計なマージンをリセットし、gapでのみ間隔を精密コントロール */
+/* 中央ディスプレイ内の全子要素のマージン、パディング、行高（上下の不要な余白）を強制リセット */
 #central-display > * {
     margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+}
+
+/* 要素の間に改行用空タグ（brなど）が挟まっている場合に非表示化して余白を完全にゼロにする */
+#central-display br {
+    display: none !important;
 }
 
 #question-text {
@@ -436,7 +443,7 @@ canvas {
     cursor: default;
 }
 
-/* メニュー全体のコンテナ */
+/* メキュ全体のコンテナ */
 #menu-container {
     width: 90%;
     max-width: 600px;
