@@ -900,9 +900,10 @@ button#close-manual-btn.btn:hover,
     font-size: 26px;
     font-weight: bold;
     letter-spacing: 12px; /* [] の文字間を広げ、アスペクト比を1:1(正方形)に近づける */
+    text-indent: 12px; /* letter-spacingによって生じる右側の余白を相殺し中心を合わせる */
     display: inline-block;
     text-align: center;
-    width: 32px; /* 横方向の占有幅を規定して四角形としての枠組みを美しく見せる */
+    white-space: nowrap; /* 幅指定を外し、折り返しを防いで綺麗に四角形を保つ */
 }
 
 .reticle-data {
@@ -920,13 +921,8 @@ button#close-manual-btn.btn:hover,
 .floating-reticle.r3 .reticle-mark {
     position: absolute;
     transform: translate(-50%, -50%);
-    width: 36px; /* ターゲット中心点用のサイズ調整 */
     letter-spacing: 14px; /* r3専用の間隔調整で正方形に見えるように */
-}
-.floating-reticle.r3 .reticle-data {
-    position: absolute;
-    left: 20px;
-    top: -5px;
+    text-indent: 14px; /* ズレ補正 */
 }
 
 
