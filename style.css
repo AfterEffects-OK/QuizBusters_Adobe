@@ -892,7 +892,7 @@ button#close-manual-btn.btn:hover,
     opacity: 0.4;
     display: flex;
     align-items: center;
-    gap: 14px; /* ターゲットマーカーの [] とデータの隙間を少し広げて読みやすく調整 */
+    gap: 12px; /* ターゲットマーカーの [] とデータの隙間を少し広げて読みやすく調整 */
 }
 
 /* ターゲットマーカーブラケット [] 部分のフォントサイズと間隔のバランス調整 */
