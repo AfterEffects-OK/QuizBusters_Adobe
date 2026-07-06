@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Orbitron:wght@400;700;900&display=swap');
+
 /* ==========================================================================
    GAME HUD STYLES
    ========================================================================== */
@@ -20,7 +22,7 @@ body, html {
     height: 100%;
     overflow: hidden;
     background-color: var(--bg);
-    font-family: 'Orbitron', Courier, monospace;
+    font-family: 'Orbitron', 'Chakra Petch', 'Courier New', Courier, monospace;
     color: white;
     user-select: none;
     touch-action: none;
