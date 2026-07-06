@@ -899,7 +899,7 @@ button#close-manual-btn.btn:hover,
 .reticle-mark {
     font-size: 26px;
     font-weight: bold;
-    letter-spacing: 24px; /* [] の文字間を広げ、アスペクト比を1:1(正方形)に近づける */
+    letter-spacing: 18px; /* [] の文字間を広げ、アスペクト比を1:1(正方形)に近づける */
     display: inline-block;
     text-align: center;
     width: 32px; /* 横方向の占有幅を規定して四角形としての枠組みを美しく見せる */
