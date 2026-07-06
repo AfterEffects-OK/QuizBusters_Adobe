@@ -900,7 +900,7 @@ button#close-manual-btn.btn:hover,
     font-size: 26px;
     font-weight: bold;
     letter-spacing: 12px; /* [] の文字間を広げ、アスペクト比を1:1(正方形)に近づける */
-    text-indent: 12px; /* letter-spacingによって生じる右側の余白を相殺し中心を合わせる */
+    text-indent: 14px; /* letter-spacingによって生じる右側の余白を相殺し中心を合わせる */
     display: inline-block;
     text-align: center;
     white-space: nowrap; /* 幅指定を外し、折り返しを防いで綺麗に四角形を保つ */
