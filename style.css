@@ -908,8 +908,19 @@ button#close-manual-btn.btn:hover,
 
 .reticle-data {
     font-size: 10px;
-    line-height: 1.1;
+    line-height: 0.9; /* 文字自体の上下の隙間を極限まで詰める */
     white-space: nowrap;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0; /* 行同士の間隔をゼロにする */
+}
+
+/* 座標テキストが p や div タグで囲まれていた場合に発生するデフォルトの余白を強制リセット */
+.reticle-data > * {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 0.9 !important;
 }
 
 .floating-reticle.r3 { 
